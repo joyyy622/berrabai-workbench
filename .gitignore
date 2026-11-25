@@ -1,0 +1,39 @@
+# Runtime data and credentials remain local.
+*.sqlite*
+*.db
+*.db-*
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+backups/
+exports/
+uploads/
+*备份*.json
+*backup*.json
+*.xlsx
+*.xls
+*.csv
+!examples/sample-orders.csv
+*.tsv
+!catalog_snapshot.tsv
+*.log
+
+# Development artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.DS_Store
+.pytest_cache/
+.coverage
+coverage/
+
+# Historical customer-facing UI retained locally only.
+archive/
+dist/app.js
+经营灵感室预览.jpg

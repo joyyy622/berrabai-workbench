@@ -1,0 +1,31 @@
+name: Workbench checks
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Storage, feeds and service tests
+        run: python -m unittest discover -s tests -v
+      - name: JavaScript syntax and analytics tests
+        run: |
+          node --check dist/owner.js
+          node --check dist/catalog-data.js
+          node --test tests/analytics.test.cjs
