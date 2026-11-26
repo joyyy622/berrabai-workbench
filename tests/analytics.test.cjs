@@ -68,3 +68,25 @@ test('line identity survives refund updates and separates multi-line orders', ()
   const two = Array.from(updated); two[1] = 'different-line';
   assert.notEqual(core.normalize({rows:[two]}, mapping)[0].id, row.id);
 });
+
+test('unknown or missing status never becomes paid revenue', () => {
+  const row = orders[0];
+  const result = core.summarize(['', undefined, '神秘状态', '待核对', '待支付'].map((status,i)=>({...row,orderId:String(i),status})),row.date,row.date);
+  assert.equal(result.orders, 0);
+  assert.equal(result.revenue, 0);
+  assert.equal(result.unrecognizedStatus, 5);
+  const blank = Array.from(raw.rows[0]); blank[9]='';
+  assert.equal(core.normalize({rows:[blank]},mapping)[0].status,'待核对');
+  assert.equal(core.normalize({rows:[blank]},{...mapping,status:''})[0].status,'待核对');
+  for(const status of ['已支付','已发货','已完成','部分退款','已退款']) assert.equal(core.isPaidStatus(status), true);
+});
+
+test('daily and weekly report ranges and comparison labels ignore page period', () => {
+  const day = core.reportRange('day','2026-11-26','2026-10-28','2026-11-26');
+  assert.equal(day.join(','),'2026-11-25,2026-11-25');
+  const week = core.reportRange('week','2026-11-26','2026-10-28','2026-11-26');
+  assert.equal(week.join(','),'2026-11-19,2026-11-25');
+  const d = core.summarize(orders,...day), w = core.summarize(orders,...week);
+  assert.match(core.comparison(d.revenue,d.previous.revenue,d.previous.lines,d.days),/比前1天/);
+  assert.match(core.comparison(w.revenue,w.previous.revenue,w.previous.lines,w.days),/比前7天/);
+});
