@@ -6,11 +6,9 @@
 
 ## Cloudflare Pages 的适用范围
 
-[Cloudflare Pages 静态部署](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)可以托管 HTML、CSS 和 JavaScript，但本项目还依赖 Python HTTP 服务、SQLite 文件和模型接口。目前没有 Pages Functions / Workers 后端适配或云数据库。
+[Cloudflare Pages](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)可托管本项目的公开静态演示。需使用下文的构建命令生成 `public-demo`，以启用独立的浏览器数据模式。
 
-网页通过 HTTP 打开时会请求同源 `/api/me`、`/api/business/state` 等接口。仅发布 `dist/` 会缺少这些接口。因此当前没有可直接用于 Pages 的完整部署配置。
-
-后续可将 Python 服务整体部署到可持久化的主机；若使用 Pages 托管前端，则需另行实现后端地址配置、跨域与会话方案。云主机上的 `127.0.0.1` 指向云主机本身，不能访问自己电脑上的 Ollama。
+完整业务版依赖 Python HTTP 服务、SQLite 与模型接口，当前没有 Workers / 云数据库适配。直接发布原始 `dist/` 仍会缺少 `/api/*` 接口；静态演示不承担管理员登录、共享数据库、真实 AI 问答或 RSS 获取。
 
 ## 完整在线服务需要准备
 
@@ -53,3 +51,24 @@ python3 server.py
 当前数据路径是：小程序订单后台导出文件 → 工作台导入、字段映射与明细更新 → SQLite 分析数据 → 图表与报告。GitHub 托管代码，不负责订单同步。
 
 直接接口接入尚未实现。后续对接微信云开发或自建后台时，需要确认实际订单表、访问授权、成交状态与退款字段，再实现服务端增量读取与同步记录。业务后台仍是交易数据来源，浏览器不保存数据库访问凭据。
+
+## Cloudflare Pages 公开演示版
+
+公开演示采用独立静态构建，不运行 Python、SQLite 或模型服务。访客数据保存在各自浏览器中；初次访问展示内置演示，导入订单时进入独立的个人工作区。首次访问的数据不会与导入的订单累加。
+
+在 Cloudflare 控制台的 Workers & Pages 中，选择 Create application → Pages → Import an existing Git repository，授权 GitHub 仓库 `joyyy622/berrabai-workbench`，使用以下设置：
+
+| 设置项 | 值 |
+| --- | --- |
+| Framework preset | None |
+| Production branch | `main` |
+| Root directory | 仓库根目录，留空 |
+| Build command | `python3 scripts/build-public-demo.py` |
+| Build output directory | `public-demo` |
+| 环境变量 | 无需配置管理员密码或模型密钥 |
+
+部署成功后，控制台会给出实际的 `*.pages.dev` 网址；在首次部署成功前，不把预测域名视为已上线。后续推送到 `main` 后，Pages 会自动重新构建。GitHub 仓库保持私有也能连接 Pages。
+
+本地执行同一构建命令后，也可将 `public-demo` 目录内容打成 ZIP，在 Pages 的 Direct Upload 页面上传。Git 集成与直接上传是两种项目创建方式，本项目推荐 Git 集成以便持续更新。
+
+构建只复制四个前端文件及响应头配置，排除数据库、订单备份、密钥和 Python 服务。在线模式强制使用浏览器存储，不请求 `/api/*`；AI 自由问答与 RSS 获取需要完整业务服务，不包含在此静态演示中。

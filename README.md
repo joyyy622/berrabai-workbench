@@ -84,4 +84,4 @@ docs/                   使用说明、运行环境与截图
 
 ## 当前状态
 
-本地版本已实现订单分析、经营记录、报告和模型接入。代码与文档已托管至 GitHub，自动检查覆盖 Python 3.9、Python 3.13 和 JavaScript。当前未部署公网服务，运行环境见 [部署说明](docs/DEPLOYMENT.md)。
+本地版本已实现订单分析、经营记录、报告和模型接入。代码与文档已托管至 GitHub，自动检查覆盖 Python 3.9、Python 3.13 和 JavaScript。已提供 Cloudflare Pages 静态演示构建：`python3 scripts/build-public-demo.py`，输出目录为 `public-demo`。公开网址需在 Cloudflare 完成首次发布后生成，配置见 [部署说明](docs/DEPLOYMENT.md)。

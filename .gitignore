@@ -37,3 +37,6 @@ coverage/
 archive/
 dist/app.js
 经营灵感室预览.jpg
+
+# Generated Cloudflare Pages deployment output
+public-demo/
