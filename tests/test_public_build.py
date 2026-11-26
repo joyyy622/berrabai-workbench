@@ -16,7 +16,11 @@ class PublicBuildTests(unittest.TestCase):
             self.assertEqual({p.name for p in output.iterdir()}, {'index.html','owner.js','owner.css','catalog-data.js','_headers'})
             self.assertIn('window.BERRABAI_PUBLIC_DEMO=true', (output/'index.html').read_text())
             self.assertNotIn('BERRABAI_PUBLIC_DEMO=true', (root/'dist/index.html').read_text())
-            self.assertIn("connect-src 'none'", (output/'_headers').read_text())
+            headers = (output/'_headers').read_text()
+            self.assertIn("connect-src 'self' https://cloudflareinsights.com", headers)
+            self.assertIn('https://static.cloudflareinsights.com/beacon.min.js', headers)
+            self.assertNotIn('connect-src *', headers)
+            self.assertIn('Referrer-Policy: strict-origin-when-cross-origin', headers)
             # Rebuilding replaces stale output, including accidentally placed runtime files.
             (output/'private.sqlite3').write_text('must not publish')
             build()

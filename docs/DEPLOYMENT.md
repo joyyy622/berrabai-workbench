@@ -80,3 +80,13 @@ python3 server.py
 已连接 GitHub 的 `main` 分支，启用自动构建。2026-11-26 已验证独立、未登录浏览器可直接打开总览与规则报告，不出现管理员登录或自由问答输入框。访客导入的数据保存在各自浏览器。
 
 若部署状态成功但访问 404，先检查 Build command 与 Build output directory 是否被留空。两项分别应为 `python3 scripts/build-public-demo.py` 和 `public-demo`；保存后需重新构建，原有部署不会自动改为新目录。
+
+## 查看访问统计
+
+在 Cloudflare Pages 的 `berrabai-workbench` 项目中，打开 Metrics，在 Web Analytics 区域点击 Enable。Cloudflare 会在下一次部署时自动注入统计脚本；随后在 Web Analytics 中选择这个站点查看数据。
+
+静态构建已允许官方脚本 `https://static.cloudflareinsights.com/beacon.min.js` 及统计上报地址。统计不会把访客在工作台中导入的订单作为业务数据上传；应用的订单、报告和待办仍保存在各自浏览器中。
+
+Visits 表示访问次数，一次访问可能包含多次页面浏览；Page views 表示页面浏览量。两者都不能直接作为严格去重的访客人数。统计从启用并部署后开始，无法补回未收集的历史访问，广告拦截等因素也可能造成漏计。工作台内的侧栏切换不代表新的独立访客。
+
+参考：[Pages 开启统计](https://developers.cloudflare.com/pages/how-to/web-analytics/)、[指标定义](https://developers.cloudflare.com/web-analytics/data-metrics/high-level-metrics/)。
