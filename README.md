@@ -4,6 +4,8 @@ Berrabai 手工定制业务的内部工具，用于查看订单、款式和颜�
 
 商品包括贴钻娃娃、手机配件和永生花等品类。工作台将订单统计与上新、活动、内容发布等记录放在同一个页面，便于按时间查看商品表现和业务变化。
 
+**[打开在线演示](https://berrabai-workbench.pages.dev/)** · 无需登录，访客数据各自保存在浏览器。
+
 ![经营总览](docs/images/workspace-preview.png)
 
 ## 无需配置即可查看演示
@@ -84,4 +86,4 @@ docs/                   使用说明、运行环境与截图
 
 ## 当前状态
 
-本地版本已实现订单分析、经营记录、报告和模型接入。代码与文档已托管至 GitHub，自动检查覆盖 Python 3.9、Python 3.13 和 JavaScript。已提供 Cloudflare Pages 静态演示构建：`python3 scripts/build-public-demo.py`，输出目录为 `public-demo`。公开网址需在 Cloudflare 完成首次发布后生成，配置见 [部署说明](docs/DEPLOYMENT.md)。
+本地版本已实现订单分析、经营记录、报告和模型接入。代码与文档已托管至 GitHub，自动检查覆盖 Python 3.9、Python 3.13 和 JavaScript。已提供 Cloudflare Pages 静态演示构建：`python3 scripts/build-public-demo.py`，输出目录为 `public-demo`。公开演示已发布到 [Cloudflare Pages](https://berrabai-workbench.pages.dev/)，配置见 [部署说明](docs/DEPLOYMENT.md)。
